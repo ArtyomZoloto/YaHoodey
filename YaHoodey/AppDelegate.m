@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "HistoryTableViewController.h"
+#import "DataSaverViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,13 +19,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    UITabBarController *tbc = [UITabBarController new];
-    self.window.rootViewController = tbc;
-    NSMutableArray *tabs = [NSMutableArray new];
+
     
     HistoryTableViewController *hc = [HistoryTableViewController new];
-    [tabs addObject:hc];
-    tbc.viewControllers = tabs;
+    DataSaverViewController *dataSaverVC = [DataSaverViewController new];
+
+    UITabBarController *tbc = [UITabBarController new];
+    tbc.viewControllers = @[hc,dataSaverVC];
+    tbc.selectedViewController = dataSaverVC;
+    
+    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = tbc;
+    [self.window makeKeyAndVisible];
     
     return YES;
 }

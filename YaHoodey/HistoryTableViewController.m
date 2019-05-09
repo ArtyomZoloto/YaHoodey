@@ -14,6 +14,17 @@
 
 @implementation HistoryTableViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        UIImage *orig_img = [UIImage imageNamed:@"historyBarItem"];
+        UIImage *img = [orig_img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"История" image:img tag:1];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -39,9 +50,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * identifier = @"reuseIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier forIndexPath:indexPath];
-    
-    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
+    if (!cell){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    cell.textLabel.text = @"hello!";
     return cell;
 }
 
