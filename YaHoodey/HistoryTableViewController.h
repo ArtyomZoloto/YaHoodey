@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+
 NS_ASSUME_NONNULL_BEGIN
+@protocol WeightServiceProtocol;
 
 @interface HistoryTableViewController : UITableViewController
-
+-(instancetype) initWithService: (id<WeightServiceProtocol>) service;
 @end
 
 NS_ASSUME_NONNULL_END

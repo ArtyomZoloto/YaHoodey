@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "HistoryTableViewController.h"
 #import "DataSaverViewController.h"
+#import "WeightService.h"
 
 @interface AppDelegate ()
 
@@ -20,9 +21,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
-    
-    HistoryTableViewController *hc = [HistoryTableViewController new];
-    DataSaverViewController *dataSaverVC = [DataSaverViewController new];
+    WeightService *service = [WeightService new];
+    HistoryTableViewController *hc = [[HistoryTableViewController alloc] initWithService:service];
+    DataSaverViewController *dataSaverVC = [[DataSaverViewController alloc] initWithService:service];
 
     UITabBarController *tbc = [UITabBarController new];
     tbc.viewControllers = @[hc,dataSaverVC];

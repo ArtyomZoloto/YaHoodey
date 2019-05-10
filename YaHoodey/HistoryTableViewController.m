@@ -7,9 +7,10 @@
 //
 
 #import "HistoryTableViewController.h"
+#import "WeightServiceProtocol.h"
 
 @interface HistoryTableViewController ()
-
+@property (strong, nonatomic) id<WeightServiceProtocol> service;
 @end
 
 @implementation HistoryTableViewController
@@ -24,6 +25,14 @@
     }
     return self;
 }
+- (instancetype)initWithService:(id<WeightServiceProtocol>)service
+{
+    self = [self init];
+    if (self) {
+        _service = service;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,16 +44,20 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:YES];
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 1;
+    return self.service.data.count;
 }
 
 
@@ -52,9 +65,11 @@
     static NSString * identifier = @"reuseIdentifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
     if (!cell){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
-    cell.textLabel.text = @"hello!";
+    cell.textLabel.text = [self.service stringDateForRow: indexPath.row];
+    CGFloat value = [self.service valueForRow: indexPath.row];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%2.1f", value];
     return cell;
 }
 
