@@ -47,7 +47,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
-    [self.tableView reloadData];
+    [self animateTable];
 }
 
 #pragma mark - Table view data source
@@ -67,12 +67,20 @@
     if (!cell){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
+    if (indexPath.row > 0 && [self isGreaterValueForRow: indexPath]){
+        cell.detailTextLabel.textColor = [UIColor redColor];
+    } else {
+        cell.detailTextLabel.textColor = [UIColor greenColor];
+    }
     cell.textLabel.text = [self.service stringDateForRow: indexPath.row];
     CGFloat value = [self.service valueForRow: indexPath.row];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%2.1f", value];
     return cell;
 }
 
+-(BOOL) isGreaterValueForRow: (NSIndexPath*) indexPath {
+    return [self.service valueForRow: indexPath.row] > [self.service valueForRow: indexPath.row-1];
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -117,5 +125,24 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(void) animateTable {
+    [self.tableView reloadData];
+    NSArray *cells = self.tableView.visibleCells;
+    CGFloat tableWidth = self.tableView.bounds.size.width;
+    for (UITableViewCell *cell in cells){
+        cell.transform = CGAffineTransformMakeTranslation(-tableWidth, 0);
+    }
+    double index = 1.0;
+    for (UITableViewCell *cell in cells){
+        [UIView animateWithDuration:0.3f
+                              delay:0.1 * index++
+                            options:UIViewAnimationOptionCurveEaseIn
+                         animations:^{
+                             cell.transform = CGAffineTransformIdentity;
+                         }
+                         completion:nil];
+    }
+}
 
 @end

@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UITextField *textField;
 @property (strong, nonatomic) id<WeightServiceProtocol> service;
 @property (strong, nonatomic) UILabel *statusLabel;
+@property (strong, nonatomic) UIStackView *mainStackView;
 -(void) status: (BOOL) result;
 @end
 
@@ -39,9 +40,21 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)loadView
 {
     [super loadView];
+
+    
+    UIImageView *scales = [UIImageView new];
+    scales.translatesAutoresizingMaskIntoConstraints = NO;
+    [scales.widthAnchor constraintEqualToAnchor:scales.heightAnchor].active = YES;
+    [scales setContentHuggingPriority:40 forAxis:UILayoutConstraintAxisVertical];
+    scales.image = [UIImage imageNamed:@"scales"];
     
     self.statusLabel = [UILabel new];
     self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -75,63 +88,43 @@
     clearButton.translatesAutoresizingMaskIntoConstraints = NO;
     [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     [clearButton setTitle:@"Очистить" forState:UIControlStateNormal];
-
+    
     
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
     saveButton.translatesAutoresizingMaskIntoConstraints = NO;
     [saveButton addTarget:self action:@selector(save) forControlEvents:UIControlEventTouchUpInside];
     [saveButton setTitle:@"Сохранить" forState:UIControlStateNormal];
-
+    
     UIStackView *buttonsStackView = [[UIStackView alloc] initWithArrangedSubviews:@[clearButton, saveButton]];
     buttonsStackView.translatesAutoresizingMaskIntoConstraints = NO;
     buttonsStackView.axis = UILayoutConstraintAxisHorizontal;
     buttonsStackView.spacing = 20.0f;
     
     NSLayoutConstraint *buttonsEqualConstraints = [NSLayoutConstraint
-                                                  constraintWithItem:clearButton
-                                                  attribute:NSLayoutAttributeWidth
-                                                  relatedBy:NSLayoutRelationEqual
-                                                  toItem:saveButton
-                                                  attribute:NSLayoutAttributeWidth
-                                                  multiplier:1
-                                                  constant:0];
+                                                   constraintWithItem:clearButton
+                                                   attribute:NSLayoutAttributeWidth
+                                                   relatedBy:NSLayoutRelationEqual
+                                                   toItem:saveButton
+                                                   attribute:NSLayoutAttributeWidth
+                                                   multiplier:1
+                                                   constant:0];
     [buttonsStackView addConstraint:buttonsEqualConstraints];
     
-    UIStackView *mainStackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.statusLabel,textFieldStackView, buttonsStackView]];
-    mainStackView.translatesAutoresizingMaskIntoConstraints = NO;
-    mainStackView.distribution = UIStackViewDistributionFillEqually;
-    mainStackView.alignment = UIStackViewAlignmentFill;
-    mainStackView.spacing = 30.0f;
-
-    mainStackView.axis = UILayoutConstraintAxisVertical;
-    [self.view addSubview:mainStackView];
+    self.mainStackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.statusLabel,textFieldStackView, buttonsStackView, scales]];
+    self.mainStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mainStackView.distribution = UIStackViewDistributionFill;
+    self.mainStackView.alignment = UIStackViewAlignmentFill;
+    self.mainStackView.spacing = 30.0f;
     
-    NSLayoutConstraint *left = [NSLayoutConstraint
-                                                constraintWithItem: mainStackView
-                                                attribute:NSLayoutAttributeLeadingMargin
-                                                relatedBy:NSLayoutRelationEqual
-                                                toItem:self.view
-                                                attribute:NSLayoutAttributeLeadingMargin
-                                                multiplier:1
-                                                constant:0];
-    NSLayoutConstraint *right = [NSLayoutConstraint
-                                constraintWithItem: mainStackView
-                                attribute:NSLayoutAttributeTrailingMargin
-                                relatedBy:NSLayoutRelationEqual
-                                toItem:self.view
-                                attribute:NSLayoutAttributeTrailingMargin
-                                multiplier:1
-                                constant:0];
-    NSLayoutConstraint *centerY = [NSLayoutConstraint
-                                                 constraintWithItem:self.view
-                                                 attribute:NSLayoutAttributeCenterY
-                                                 relatedBy:NSLayoutRelationEqual
-                                                 toItem:mainStackView
-                                                 attribute:NSLayoutAttributeCenterY
-                                                 multiplier:1
-                                                 constant:0];
+    self.mainStackView.axis = UILayoutConstraintAxisVertical;
+    [self.view addSubview:self.mainStackView];
     
-    [self.view addConstraints:@[left,right,centerY]];
+    //UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
+    UILayoutGuide *safeArea = self.view.layoutMarginsGuide;
+    [self.mainStackView.topAnchor constraintEqualToAnchor:safeArea.topAnchor].active = YES;
+    [self.mainStackView.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor].active = YES;
+    [self.mainStackView.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor].active = YES;
+    
 }
 
 - (void)viewDidLoad
@@ -140,27 +133,32 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (range.location == 0 && [string rangeOfString:@"."].location != NSNotFound){
+
+    if ((range.location == 0 && [string rangeOfString:@"."].location != NSNotFound) ||
+        (range.location == 0 && [string rangeOfString:@","].location != NSNotFound)){
         return NO;
     }
-        
-    NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
-  
-    return [string rangeOfCharacterFromSet:digits].location != NSNotFound
-             || [string rangeOfString:@"."].location != NSNotFound;
+    return YES;
+//    NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
+//
+//    return [string rangeOfCharacterFromSet:digits].location != NSNotFound
+//    || [string rangeOfString:@"."].location != NSNotFound
+//    || [string rangeOfString:@","].location != NSNotFound;
 }
+
+
 
 
 #pragma mark - Action Capture
@@ -169,12 +167,13 @@
     [self.textField resignFirstResponder];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     __weak DataSaverViewController *weakSelf = self;
-    CGFloat value = [weakSelf.textField.text floatValue];
+    NSString *string = [weakSelf.textField.text stringByReplacingOccurrencesOfString:@"," withString:@"."];
+    CGFloat value = [string floatValue];
     dispatch_async(queue, ^{
-       BOOL result =  [weakSelf.service save: value];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf status:result];
-            });
+        BOOL result =  [weakSelf.service save: value];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf status:result];
+        });
     });
 }
 
@@ -201,6 +200,7 @@
                                         completion: nil];
                     }];
 }
+
 
 
 @end
