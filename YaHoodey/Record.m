@@ -1,7 +1,7 @@
 
-#import "WeightModel.h"
+#import "Record.h"
 
-@implementation WeightModel
+@implementation Record
 -(instancetype) initWithDate: (NSDate*) date andValue: (CGFloat) value
 {
     self = [super init];

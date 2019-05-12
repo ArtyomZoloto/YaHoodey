@@ -16,7 +16,7 @@
 		42D364E822831FD8005D1336 /* HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D364E722831FD8005D1336 /* HistoryTableViewController.m */; };
 		889C53E62284362600C1BD99 /* DataSaverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 889C53E52284362600C1BD99 /* DataSaverViewController.m */; };
 		889C540B22849AC200C1BD99 /* WeightService.m in Sources */ = {isa = PBXBuildFile; fileRef = 889C540A22849AC200C1BD99 /* WeightService.m */; };
-		88CEAF1D2284A09000B77F78 /* WeightModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CEAF1C2284A09000B77F78 /* WeightModel.m */; };
+		88CEAF1D2284A09000B77F78 /* Record.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CEAF1C2284A09000B77F78 /* Record.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,8 +37,8 @@
 		889C540922849AC200C1BD99 /* WeightService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeightService.h; sourceTree = "<group>"; };
 		889C540A22849AC200C1BD99 /* WeightService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeightService.m; sourceTree = "<group>"; };
 		88CEAF1A22849E1A00B77F78 /* WeightServiceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeightServiceProtocol.h; sourceTree = "<group>"; };
-		88CEAF1B2284A09000B77F78 /* WeightModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeightModel.h; sourceTree = "<group>"; };
-		88CEAF1C2284A09000B77F78 /* WeightModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeightModel.m; sourceTree = "<group>"; };
+		88CEAF1B2284A09000B77F78 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
+		88CEAF1C2284A09000B77F78 /* Record.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Record.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,8 +87,8 @@
 				889C540922849AC200C1BD99 /* WeightService.h */,
 				889C540A22849AC200C1BD99 /* WeightService.m */,
 				88CEAF1A22849E1A00B77F78 /* WeightServiceProtocol.h */,
-				88CEAF1B2284A09000B77F78 /* WeightModel.h */,
-				88CEAF1C2284A09000B77F78 /* WeightModel.m */,
+				88CEAF1B2284A09000B77F78 /* Record.h */,
+				88CEAF1C2284A09000B77F78 /* Record.m */,
 			);
 			path = YaHoodey;
 			sourceTree = "<group>";
@@ -166,7 +166,7 @@
 				42D364E822831FD8005D1336 /* HistoryTableViewController.m in Sources */,
 				42D364C92282FAA0005D1336 /* ViewController.m in Sources */,
 				42D364D42282FAA2005D1336 /* main.m in Sources */,
-				88CEAF1D2284A09000B77F78 /* WeightModel.m in Sources */,
+				88CEAF1D2284A09000B77F78 /* Record.m in Sources */,
 				42D364C62282FAA0005D1336 /* AppDelegate.m in Sources */,
 				889C53E62284362600C1BD99 /* DataSaverViewController.m in Sources */,
 				889C540B22849AC200C1BD99 /* WeightService.m in Sources */,

@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WeightService : NSObject <WeightServiceProtocol>
-@property(strong, nonatomic, readonly) NSMutableArray<WeightModel*>* data;
+@property(strong, nonatomic, readonly) NSMutableArray<Record*>* records;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface WeightModel : NSObject
+@interface Record : NSObject
 @property (copy, nonatomic) NSDate *date;
 @property (assign, nonatomic) CGFloat value;
 

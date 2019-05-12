@@ -7,7 +7,7 @@
 //
 
 #import "WeightService.h"
-#import "WeightModel.h"
+#import "Record.h"
 
 @interface WeightService ()
 @end
@@ -17,34 +17,56 @@
 {
     self = [super init];
     if (self) {
-        if (!_data){
-            _data = [NSMutableArray new];
+        if (!_records){
+            _records = [NSMutableArray new];
         }
     }
-        return self;
+    return self;
 }
 
 - (BOOL)save:(CGFloat)weight {
-    long was = self.data.count;
+    long was = self.records.count;
     NSDate *curDate = [NSDate date];
-    WeightModel *wm = [[WeightModel alloc] initWithDate:curDate andValue:weight];
-    [self.data addObject:wm];
-    return self.data.count > was;
+    Record *wm = [[Record alloc] initWithDate:curDate andValue:weight];
+    [self.records addObject:wm];
+    return self.records.count > was;
 }
 
 
-- (NSString *)stringDateForRow:(NSInteger)row {
-    NSDate *date = self.data[row].date;
-    
+- (NSString *)stringDateForIndexPath:(NSIndexPath *)indexPath {
+    NSArray *key = [self recordsByMonths].allKeys[indexPath.section];
+    Record *record = [self recordsByMonths][key][indexPath.row];
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"dd.MM.yy"];
-    return [dateFormatter stringFromDate:date];
+    return [dateFormatter stringFromDate:record.date];
 }
 
 
-- (CGFloat)valueForRow:(NSInteger)row {
-    return self.data[row].value;
+- (CGFloat)valueForIndexPath:(NSIndexPath *)indexPath {
+    NSString *key = [self recordsByMonths].allKeys[indexPath.section];
+    Record *record = [self recordsByMonths][key][indexPath.row];
+    return record.value;
 }
+
+
+-(NSDictionary*) recordsByMonths{
+    NSMutableDictionary *result = [NSMutableDictionary new];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    for (Record *record in self.records){
+        NSInteger unit = [calendar component:NSCalendarUnitMonth fromDate:record.date] - 1;
+        NSString *month = [calendar monthSymbols][unit];
+        NSMutableArray *recordsByMonth = result[month];
+        if (!recordsByMonth){
+            recordsByMonth = [NSMutableArray new];
+            [result setObject:recordsByMonth forKey:month];
+        }
+        [recordsByMonth addObject:record];
+    }
+    return result;
+}
+
+
+
 
 
 

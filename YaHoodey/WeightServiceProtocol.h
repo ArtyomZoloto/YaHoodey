@@ -1,9 +1,10 @@
 #import <UIKit/UIKit.h>
 
-@class WeightModel;
+@class Record;
 @protocol WeightServiceProtocol
 -(BOOL) save: (CGFloat) weight;
--(NSArray<WeightModel*>*) data;
--(NSString*) stringDateForRow: (NSInteger) row;
--(CGFloat) valueForRow: (NSInteger) row;
+-(NSArray<Record*>*) records;
+-(NSString*) stringDateForIndexPath: (NSIndexPath*) indexPath;
+-(CGFloat) valueForIndexPath: (NSIndexPath*) indexPath;
+-(NSDictionary*) recordsByMonths;
 @end
